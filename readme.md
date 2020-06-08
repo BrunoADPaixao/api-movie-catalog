@@ -183,3 +183,5 @@
   <ul>
     <li>Exclusão: localhost/api/movies/{id do filme}</li>
   </ul>
+  
+  <h2>Arquivo de documentação e informações de como configurar o projeto em /documentacao-ultilizacao-api.txt</h2>
