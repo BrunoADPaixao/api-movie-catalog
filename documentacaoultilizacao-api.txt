@@ -1,0 +1,26 @@
+A aplicação utiliza:
+- PHP 5.*
+- Composer: https://getcomposer.org/download/
+- Laravel 5.6
+- Banco de Dados MySQL
+
+O projeto está versionado no github.com:
+Para clonar o repositório:
+- Abra o cmd ou powershell com privilégios de administrador
+- Navegue até a pasta /www do seu servidor php.
+- Clone o repositório com o comando: git clone https://github.com/BrunoADPaixao/api-movie-catalog.git
+- Entre na pasta do projeto api-movie-catalog e rode o comando: composer install
+- Crie o arquivo .env do .env.example, rode: php -r "copy('.env.example', '.env');"
+- Em seguida gere a chave do Laravel, rode: php artisan key:generate
+- Crie uma base de dados no MySQL chamada api-movie-catalog-1.1
+- Crie um usuario chamado admmovies, senha 123456 e libere todas as permissões para o banco criado.
+- Na raiz do projeto abra o arquivo .env e altere as configurações do banco de dados para:
+  DB_DATABASE=api-movie-catalog-1.1
+  DB_USERNAME=admmovies
+  DB_PASSWORD=123456
+- Na raiz do projeto, rode o comando para criar as tabela do banco de dados: php artisan migrate 
+- Agora execute a aplicação com o comando: php artisan serve.
+- Utilize as requisições descritas na coleção do Postman para executar as funcionalidades da API.
+
+
+Endpoints da API:
