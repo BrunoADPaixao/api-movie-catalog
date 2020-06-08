@@ -1,4 +1,4 @@
-API Movie catalog
+<h1>API Movie catalog</h1>
 
 Descrição da API:
 A aplicação foi feita utilizando o framewrok Laravel na versão 5.6 com banco de dados relacional MySQL.
