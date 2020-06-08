@@ -185,3 +185,4 @@
   </ul>
   
   <h2>Arquivo de documentação e informações de como configurar o projeto em /documentacao-ultilizacao-api.txt</h2>
+<h2>Arquivo da coleção do Postman em /Movie Catalog API.postman_collection.json</h2>
