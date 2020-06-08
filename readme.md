@@ -1,65 +1,102 @@
-<p align="center"><img src="https://laravel.com/assets/img/components/logo-laravel.svg"></p>
+API Movie catalog
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/d/total.svg" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/v/stable.svg" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
-</p>
+Descrição da API:
+A aplicação foi feita utilizando o framewrok Laravel na versão 5.6 com banco de dados relacional MySQL.
+Decidi usar o MySQL para persistir os dados por que devido à especificação do projeto ficou claro que exigia um modelo de banco dados relacional.
+o MySQL é uma boa opção por causa da simplicidade de se trabalhar, sendo agil para o desenvolvimento de aplicações de pequeno porte mas com uma boa margem para escalar.
+Além de ser uma tecnologia de banco de dados bastante utilizada pela comunidade possuindo ampla compatibilidade com as tecnologias de desenvolvimento do mercado.
 
-## About Laravel
+Na API é possível realizar o cadastro de um catálogo de filmes, descrevendo detalhes como a classificação indicativa, diretor, e elenco.
+- É possível listar todos os filmes cadastrados, todos os diretores cadastrados bem como todos os atores cadastrados.
+- De forma semelhante é possivel listar um registro único de cada entidade passando o id como parâmetro na rota.
+- Nessas requisições de filtragem de um registro único, na resposta estão inclusos os dados dos relacionamentos de forma detalhada. De forma que é possível ver qual é o diretor de um filme, ver quais são os atores que estralaram naquele filme.
+- Semelhantemente, é possível listar todos os filmes que um diretor específico dirigiu, e todos os filmes em que um ator espefícido participou do elenco.
+- Nas requisição de listagem de todos os registro de uma tabela, por exemplo listagem de todos os filmes, não são retornados os dados das tabelas relacionados melhorando assim o desempenho das resposta. Não há necessidade de mostrar tantos detalhes numa listagem tão genérica. 
+- É possível alterar dados como nome dos filmes, classificação, nome dos diretores, nomes dos atores.
+- É possível deletar qualquer registro criado via os endpoints abertos.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as:
+- Descrição dos relacionamentos:
+  - A tabela de diretores tem relacionamento de 1 para muitos com a tabela de filmes.
+  - A tabela de filmes tem relacionamento de muitos para 1 com a tabela de diretores.
+  - A tabela de filmes tem relacionamento de muitos para muitos com a tabela de atores.
+  - As tabelas de filmes e atores geram uma tabela pivot chamada casts (elencos) por causa do seu relacionameto muitos para muitos.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Durante o desenvolvimento pensei num modelo mais enxuto e simples possível respeitando as especificações passadas.
+Existem 3 tabelas principais e 1 tabela pivot que relaciona os filmes com os atores participantes do mesmo.
+A parte da classificação do filme, decidi não incluí-la em uma tabela própria, por questões de simplicidade, até porque um simples campo de úmero na tabela movies já dá conta desta informação.
+Mas à título de informação esta poderia ser uma tabela à parte contendo uma campo id (pk) e um campo idade do tipo inteiro, e uma referência da classificação na tabela movies via uma foreign key chamada classification_id.
 
-Laravel is accessible, yet powerful, providing tools needed for large, robust applications.
 
-## Learning Laravel
+Tabelas do banco:
+movies:
+  campos: 
+  - id (pk) - id do filme.
+  - name - nome do filme.
+  - classification - classificação recomendada do filme.
+  - director_id (fk) - id do diretor do filme.
+  
+directors
+  campos:
+  - id (pk) - id do diretor.
+  - name - nome do diretor de filmes.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of any modern web application framework, making it a breeze to get started learning the framework.
+actors
+  campos:
+  - id (pk) - id do ator.
+  - name - nome do ator de cinema.
 
-If you're not in the mood to read, [Laracasts](https://laracasts.com) contains over 1100 video tutorials on a range of topics including Laravel, modern PHP, unit testing, JavaScript, and more. Boost the skill level of yourself and your entire team by digging into our comprehensive video library.
+casts: tabela pivot entre movies e actors que representa a abstração do elenco dos filmes.
+  campos:
+  - id (pk) - id do registro filme x ator.
+  - movie_id (fk) - representa o id do filme . 
+  - actor_id (fk) - representa o id do ator.
 
-## Laravel Sponsors
+Endpoints:
 
-We would like to extend our thanks to the following sponsors for helping fund on-going Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell):
+Diretores: 
+  MÉTODO GET:
+  Listagem de todos: http://api-movie-catalog.test/api/directors
+  Filtro pelo ID: http://api-movie-catalog.test/api/directors/{id do diretor}
+  
+  MÉTODO POST:
+  Criação: http://api-movie-catalog.test/api/directors/
+    Enviar campos: name (string obrigatorio);
+  
+  MÉTODO PUT:
+  Atualização: http://api-movie-catalog.test/api/directors/{id do diretor}
+    Enviar campos: name (string obrigatorio);
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[British Software Development](https://www.britishsoftware.co)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- [UserInsights](https://userinsights.com)
-- [Fragrantica](https://www.fragrantica.com)
-- [SOFTonSOFA](https://softonsofa.com/)
-- [User10](https://user10.com)
-- [Soumettre.fr](https://soumettre.fr/)
-- [CodeBrisk](https://codebrisk.com)
-- [1Forge](https://1forge.com)
-- [TECPRESSO](https://tecpresso.co.jp/)
-- [Runtime Converter](http://runtimeconverter.com/)
-- [WebL'Agence](https://weblagence.com/)
-- [Invoice Ninja](https://www.invoiceninja.com)
-- [iMi digital](https://www.imi-digital.de/)
-- [Earthlink](https://www.earthlink.ro/)
-- [Steadfast Collective](https://steadfastcollective.com/)
+  MÉTODO DELETE:
+  Exclusão: http://api-movie-catalog.test/api/directors/{id do diretor}
 
-## Contributing
+Atores: 
+  MÉTODO GET:
+  Listagem de todos: http://api-movie-catalog.test/api/actors
+  Filtro pelo ID: http://api-movie-catalog.test/api/actors/{id do ator}
+  
+  MÉTODO POST:
+  Criação: http://api-movie-catalog.test/api/actors/
+    Enviar campos: name (string obrigatorio);
+  
+  MÉTODO PUT:
+  Atualização: http://api-movie-catalog.test/api/actors/{id do ator}
+    Enviar campos: name (string obrigatorio);
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+  MÉTODO DELETE:
+  Exclusão: http://api-movie-catalog.test/api/actors/{id do ator}
 
-## Security Vulnerabilities
+Filmes: 
+  MÉTODO GET:
+  Listagem de todos: http://api-movie-catalog.test/api/movies
+  Filtro pelo ID: http://api-movie-catalog.test/api/movies/{id do filme}
+  
+  MÉTODO POST:
+  Criação: http://api-movie-catalog.test/api/movies/
+    Enviar campos: name (string obrigatorio); classification (obrigatorio), director_id (obrigatorio), actors_id (array de inteiros obrigatorio) exemplo: "actors_id": [1, 2, 3, 4]
+  
+  MÉTODO PUT:
+  Atualização: http://api-movie-catalog.test/api/movies/{id do filme}
+    Enviar campos: name (string obrigatorio);
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+  MÉTODO DELETE:
+  Exclusão: http://api-movie-catalog.test/api/movies/{id do filme}
